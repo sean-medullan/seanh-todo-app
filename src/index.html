@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>MY TODO</title>
+        <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
+        <link rel="stylesheet" href="/assets/css/style.css"/>
+    </head>
+    <body>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <header>
+                    <h1>My Todo App</h1>
+                </header>
+                <div class="body-content">
+                    <div style="margin-top: 15px">
+                        <input type="text" placeholder="Todo item" />
+                        <button class="btn btn-primary">
+                            Add item
+                        </button>
+                    </div>
+
+                    <div style="margin-top: 15px" class="todo-items">
+                        <ul>
+                            <li class="todo-item">
+                                <input type="checkbox" />
+                                &nbsp; Added item goes here
+                                <a>remove</a>
+                            </li>
+                        </ul>
+                        <div class="stat">2 of 15 items completed</div>
+                    </div>
+                </div>
+                <footer style="margin-top: 20px;">
+                    <ul class="list-inline-piped">
+                        <li>
+                            <a href="/archived">archived</a>
+                        </li>
+                        <li>
+                            <a href="/trashed">trashed</a>
+                        </li>
+                        <li>
+                            <a href="/all">all</a>
+                        </li>
+                    </ul>
+                </footer>
+            </div>
+        </div>
+        <script src="/lib/jQuery/jquery-1.9.1.min.js"></script>
+        <script src="/lib/jQuery/jquery-ui-1.10.0.min.js"></script>
+    </body>
+</html>
