@@ -1,20 +1,24 @@
 'use strict';
 
-var todoApp = angular.module("TodoApp", [ 'ngRoute', 'ngResource']);
+var todoApp = angular.module("TodoApp", [ 'ngRoute', 'Kinvey']);
 
-todoApp.controller('TodoController', function($scope){
+todoApp.controller('TodoController', function($scope, KinveyResource){
 
     $scope.app  = {
-        name: "Sean's App",
-        todoItems: new Array()
+        name: "App Awesome - To Do",
+        todoItems: []
     };
 
-    var todoItem = {
-        title: '',
-        _id: null,
-        isComplete: false,
-        isActive: true,
-        isVisible: true
+    $scope.createItem = function(title) {
+        var todoItem = new KinveyResource.todos({
+            title: title,
+            _id: null,
+            isComplete: false,
+            isActive: true,
+            isVisible: true
+        });
+        $scope.app.todoItems.push(todoItem)
+        todoItem.$save();
     };
 
 });

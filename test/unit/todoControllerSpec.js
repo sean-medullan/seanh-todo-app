@@ -2,18 +2,28 @@
 
 describe('The "TodoController"', function() {
 
-    var scope, ctrl;
+    var scope, ctrl, httpBackend, kinveyConfig, kinveyResourceUrls;
 
     // Laod the modeule
-    beforeEach(module('TodoApp'));
+    beforeEach(module('TodoApp', 'Kinvey'));
 
     // DI
-    beforeEach(inject(function($rootScope, $controller, $injector) {
+    beforeEach(inject(function($rootScope, $controller, $httpBackend, $injector) {
         scope = $rootScope.$new();
+        httpBackend = $httpBackend;
+        kinveyResourceUrls = $injector.get("KinveyResourceUrls")
+        kinveyConfig = $injector.get("KinveyConfig")
         ctrl = $controller('TodoController', {
             $scope : scope
         });
     }));
+
+    afterEach(function(){
+        //Ensures all request i expect to have been called, have been called
+        httpBackend.verifyNoOutstandingExpectation();
+        // Ensures no requests were made, that i didn't expect
+        httpBackend.verifyNoOutstandingRequest();
+    });
 
     describe('The "app" object', function() {
         it('should have the "name" defined', function() {
@@ -68,7 +78,7 @@ describe('The "TodoController"', function() {
 
     describe('The "createItem" function', function() {
         beforeEach(function() {
-            scope.todoItems = [];
+            scope.app.todoItems = [];
         });
 
         it('should be defined', function(){
@@ -77,11 +87,16 @@ describe('The "TodoController"', function() {
         })
 
         it('should add the item to the list of "todoItems"', function() {
-            var oldLength = scope.todoItems.length;
+            var oldLength = scope.app.todoItems.length;
             var titleOfNewItem = "Newly created item";
+            httpBackend.expect('POST', kinveyConfig.hostUrl + kinveyResourceUrls.todos).respond(200, {
+                id: 134,
+                title: titleOfNewItem
+            });
             scope.createItem(titleOfNewItem);
-            expect(scope.todoItems.length).toEqual(oldLength+1);
-            expect(scope.todoItems[oldLength+1].title).toEqual(titleOfNewItem);
+            httpBackend.flush();
+            expect(scope.app.todoItems.length).toEqual(oldLength+1);
+            expect(scope.app.todoItems[scope.app.todoItems.length-1].title).toEqual(titleOfNewItem);
         })
 
     });

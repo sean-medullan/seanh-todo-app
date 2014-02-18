@@ -2,7 +2,7 @@
 
 var kinvey = angular.module('Kinvey', ['ngResource']);
 
-kiney.constant("KinveyConfig", {
+kinvey.constant("KinveyConfig", {
     header: {
         authorization: {
             name: 'Authorization',
@@ -16,14 +16,18 @@ kiney.constant("KinveyConfig", {
     hostUrl: "https://baas.kinvey.com/appdata/kid_PTFROdkMpM"
 });
 
+kinvey.constant("KinveyResourceUrls", {
+    todos: '/todos'
+})
+
 kinvey.config(function ($httpProvider, KinveyConfig) {
     $httpProvider.defaults.headers.common[KinveyConfig.header.authorization.name] = KinveyConfig.header.authorization.value;
     $httpProvider.defaults.headers.common[KinveyConfig.header.version.name] = KinveyConfig.header.version.value;
 });
 
-kinvey.factory('KinveyResources', function($resource, KinveyConfig){
+kinvey.factory('KinveyResource', function($resource, KinveyConfig, KinveyResourceUrls){
     var kinveyResources = {
-        todos: $resource(KinveyConfig + '/todos')
+        todos: $resource(KinveyConfig.hostUrl + KinveyResourceUrls.todos)
     };
 
     return kinveyResources;
