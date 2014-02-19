@@ -2,18 +2,20 @@
 
 var todoApp = angular.module("TodoApp", ['ngRoute', 'Kinvey']);
 
-todoApp.config(['$routeProvider',
-function($routeProvider) {
+todoApp.config(['$routeProvider', '$locationProvider',
+function($routeProvider, $locationProvider) {
 	$routeProvider.when('/archived', {
-		templateUrl : 'partials/phone-list.html',
+		templateUrl : 'app/todo/partials/todo-list.html',
 		controller : 'TodoController'
 	}).when('/trashed', {
-		templateUrl : 'partials/phone-detail.html',
+		templateUrl : 'app/todo/partials/todo-list.html',
 		controller : 'TodoController'
 	}).when('/all', {
-		templateUrl : 'partials/phone-detail.html',
+		templateUrl : 'app/todo/partials/todo-list.html',
 		controller : 'TodoController'
 	}).otherwise({
 		redirectTo : '/all'
 	});
-}]); 
+	$locationProvider.html5Mode(true);
+}]);
+

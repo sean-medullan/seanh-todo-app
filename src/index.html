@@ -22,18 +22,7 @@
 						</button>
 					</div>
 
-					<div style="margin-top: 15px" class="todo-items">
-						<ul>
-							<li class="todo-item" ng-repeat="todo in app.todoItems">
-								<input type="checkbox" ng-checked="todo.completed" ng-model="todo.completed" />
-								&nbsp; {{todo.name}}
-								<a ng-click="removeTodo(todo)">remove</a>
-							</li>
-						</ul>
-						<div class="stat">
-							{{completedCount()}} of {{app.todoItems.length}} items completed
-						</div>
-					</div>
+					<ng-view></ng-view>
 				</div>
 				<footer style="margin-top: 20px;">
 					<ul class="list-inline-piped">
