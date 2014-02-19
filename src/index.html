@@ -1,5 +1,6 @@
 <!doctype html>
-<html ng-app="todoApp" lang="en">
+
+<html lang="en" ng-app="TodoApp">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,12 +12,12 @@
 	  	<script src="src/app/app.js"></script>
     </head>
     <body>
-        <div class="row">
+        <div class="row" ng-controller="TodoController">
             <div class="col-md-8 col-md-offset-2">
                 <header>
-                    <h1>My Todo App</h1>
+                    <h1>{{ app.name }}</h1>
                 </header>
-                <div class="body-content">
+                <div class="body-content" >
                     <div style="margin-top: 15px">
                         <input type="text" placeholder="Todo item" />
                         <button class="btn btn-primary">
@@ -50,7 +51,13 @@
                 </footer>
             </div>
         </div>
+        <script src="/lib/angular/1.2.9/angular.js"></script>
+        <script src="/lib/angular/1.2.9/angular-resource.js"></script>
+        <script src="/lib/angular/1.2.9/angular-route.js"></script>
         <script src="/lib/jQuery/jquery-1.9.1.min.js"></script>
+        <script src="/app/app.js"></script>
+        <script src="/app/todo/controllers/todoController.js"></script>
+        <script src="/app/_common/services/kinvey.js"></script>
         <script src="/lib/jQuery/jquery-ui-1.10.0.min.js"></script>
     </body>
 </html>

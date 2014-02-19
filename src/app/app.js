@@ -1,4 +1,4 @@
-// todo app boom
 
-var todoApp = angular.module('todoApp', []);
+'use strict';
 
+var todoApp = angular.module("TodoApp", [ 'ngRoute', 'Kinvey']);
