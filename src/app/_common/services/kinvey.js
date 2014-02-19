@@ -27,8 +27,9 @@ kinvey.config(function ($httpProvider, KinveyConfig) {
 
 kinvey.factory('KinveyResource', function($resource, KinveyConfig, KinveyResourceUrls){
     var kinveyResources = {
-        todos: $resource(KinveyConfig.hostUrl + KinveyResourceUrls.todos)
+        todos: $resource(KinveyConfig.hostUrl + KinveyResourceUrls.todos, {id:'@_id'}, {
+			update : {method: 'PUT'}
+		})
     };
-
     return kinveyResources;
 });

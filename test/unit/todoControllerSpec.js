@@ -27,16 +27,22 @@ describe('The "TodoController"', function() {
 
     describe('The "app" object', function() {
         it('should have the "name" defined', function() {
-            expect(scope.app.name).toBeDefined();
+            httpBackend.expect('GET', 'https://baas.kinvey.com/appdata/kid_PTFROdkMpM/todos?').respond(200);
+			expect(scope.app.name).toBeDefined();
             expect(angular.isDefined(scope.app.name)).toBeTruthy();
+			httpBackend.flush(); 
         });
 
         it('should have a list of todo items', function() {
-            expect(angular.isDefined(scope.app.todoItems)).toBeTruthy();
-        });
+            httpBackend.expect('GET', 'https://baas.kinvey.com/appdata/kid_PTFROdkMpM/todos?').respond(200);
+			expect(angular.isDefined(scope.app.todoItems)).toBeTruthy();
+        	httpBackend.flush(); 
+		});
 
         it('should have a list of todo items should be zero by default', function() {
-            expect(scope.app.todoItems.length).toEqual(0);
+            httpBackend.expect('GET', 'https://baas.kinvey.com/appdata/kid_PTFROdkMpM/todos?').respond(200);
+			expect(scope.app.todoItems.length).toEqual(0);
+			httpBackend.flush(); 
         });
     });
 
@@ -82,9 +88,11 @@ describe('The "TodoController"', function() {
         });
 
         it('should be defined', function(){
+			httpBackend.expect('GET', 'https://baas.kinvey.com/appdata/kid_PTFROdkMpM/todos?').respond(200);
             expect(scope.createItem).toBeDefined();
             expect(angular.isFunction(scope.createItem)).toBeTruthy();
-        })
+			httpBackend.flush();        
+		});
 
         it('should add the item to the list of "todoItems"', function() {
             var oldLength = scope.app.todoItems.length;
@@ -97,8 +105,17 @@ describe('The "TodoController"', function() {
             httpBackend.flush();
             expect(scope.app.todoItems.length).toEqual(oldLength+1);
             expect(scope.app.todoItems[scope.app.todoItems.length-1].title).toEqual(titleOfNewItem);
-        })
+        });
 
     });
+
+	describe('The "updateStatus" function', function(){
+		it('should be defined', function(){
+			httpBackend.expect('GET', 'https://baas.kinvey.com/appdata/kid_PTFROdkMpM/todos?').respond(200);
+            expect(scope.updateStatus).toBeDefined();
+            expect(angular.isFunction(scope.updateStatus)).toBeTruthy();
+			httpBackend.flush();
+        });
+	});
 });
 
