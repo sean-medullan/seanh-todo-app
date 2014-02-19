@@ -22,17 +22,14 @@ todoApp.controller('TodoController', function($scope, TodoService) {
 		newTodo.title = "";
 	};
 
-	// $scope.updateTodo = function(todo) {
-	// for (var i=0; i < todoItems.length; i++) {
-	// if (todoItems[i].id == todo.id) {
-	// todoItems[i] = todo;
-	// return;
-	// }
-	// };
-	// };
+	$scope.updateTodo = function(todo) {
+		TodoService.updateTodo(todo);
+	};
 
 	$scope.removeTodo = function(todo) {
 		TodoService.removeTodo(todo);
+		//FIXME: not working
+		$scope.app.todoItems = TodoService.getTodos();
 	};
 
 	$scope.isCompleteCount = function(todo) {
@@ -54,14 +51,16 @@ todoApp.factory('TodoService', function(KinveyResource) {
 			return KinveyResource.todos.query();
 		},
 		saveTodo : function(todo) {
-			console.log(todo);
-			return;
-			var todoRes = new KinveyResource.todos(todo);
-			todoRes.save();
+			return KinveyResource.todos.save(todo);
 		},
 		removeTodo : function(todo) {
-			KinveyResource.todos.remove({_id: todo._id});
+			KinveyResource.todos.remove({
+				id : todo._id
+			});
 		},
+		updateTodo : function(todo) {
+			return KinveyResource.todos.update({ id:todo._id }, todo);
+		}, 
 	};
 });
 
@@ -77,4 +76,4 @@ todoApp.filter('archivedTodos', function() {
 		}
 		return out;
 	};
-}); 
+});

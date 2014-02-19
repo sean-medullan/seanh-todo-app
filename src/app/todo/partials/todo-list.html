@@ -1,7 +1,7 @@
 <div style="margin-top: 15px" class="todo-items">
 	<ul>
 		<li class="todo-item" ng-repeat="todo in app.todoItems">
-			<input type="checkbox" ng-checked="todo.isComplete" ng-model="todo.isComplete" />
+			<input type="checkbox" ng-checked="todo.isComplete" ng-model="todo.isComplete" ng-change="updateTodo(todo)" />
 			&nbsp; {{todo.title}}
 			<a ng-click="removeTodo(todo)">remove</a>
 		</li>
