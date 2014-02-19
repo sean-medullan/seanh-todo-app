@@ -64,14 +64,14 @@ describe('The "TodoController"', function() {
 
         it('should remove the item at the index 0', function() {
             scope.removeItem(0);
-            expect(scope.todoItems.length).toEqaul(1);
-            expect(scope.todoItems[0].id).toEqaul(9);
+            expect(scope.todoItems.length).toEqual(1);
+            expect(scope.todoItems[0].id).toEqual(9);
         });
 
         it('should remove the item at the index 1', function() {
             scope.removeItem(1);
-            expect(scope.todoItems.length).toEqaul(1);
-            expect(scope.todoItems[0].id).toEqaul(23);
+            expect(scope.todoItems.length).toEqual(1);
+            expect(scope.todoItems[0].id).toEqual(23);
         });
 
     });
