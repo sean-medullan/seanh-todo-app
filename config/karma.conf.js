@@ -31,8 +31,10 @@ module.exports = function (config) {
 
         autoWatch: true,
 
-        browsers: ['PhantomJS'],
+        //browsers: ['PhantomJS'],
 
+		browsers: ['C:\Program Files (x86)\Google\Chrome\Application\chrome.exe'],
+		
         preprocessors: {
             'src/partials/**/*.html': 'ng-html2js' //'html2js'
         },

@@ -64,14 +64,14 @@ describe('The "TodoController"', function() {
 
         it('should remove the item at the index 0', function() {
             scope.removeItem(0);
-            expect(scope.todoItems.length).toEqaul(1);
-            expect(scope.todoItems[0].id).toEqaul(9);
+            expect(scope.todoItems.length).toEqual(1);
+            expect(scope.todoItems[0].id).toEqual(9);
         });
 
         it('should remove the item at the index 1', function() {
             scope.removeItem(1);
-            expect(scope.todoItems.length).toEqaul(1);
-            expect(scope.todoItems[0].id).toEqaul(23);
+            expect(scope.todoItems.length).toEqual(1);
+            expect(scope.todoItems[0].id).toEqual(23);
         });
 
     });
@@ -84,7 +84,7 @@ describe('The "TodoController"', function() {
         it('should be defined', function(){
             expect(scope.createItem).toBeDefined();
             expect(angular.isFunction(scope.createItem)).toBeTruthy();
-        })
+        });
 
         it('should add the item to the list of "todoItems"', function() {
             var oldLength = scope.app.todoItems.length;
@@ -97,7 +97,7 @@ describe('The "TodoController"', function() {
             httpBackend.flush();
             expect(scope.app.todoItems.length).toEqual(oldLength+1);
             expect(scope.app.todoItems[scope.app.todoItems.length-1].title).toEqual(titleOfNewItem);
-        })
+        });
 
     });
 });
