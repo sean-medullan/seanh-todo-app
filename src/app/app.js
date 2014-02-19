@@ -1,7 +1,6 @@
 'use strict';
 
 var todoApp = angular.module("TodoApp", [ 'ngRoute', 'Kinvey']);
-
 todoApp.controller('TodoController', function($scope, KinveyResource){
 
     $scope.app  = {
@@ -32,9 +31,9 @@ todoApp.controller('TodoController', function($scope, KinveyResource){
 	
 	$scope.updateStatus = function(item){
 		console.log(item.isComplete);
-		 item.$update({
-		 				_id : item._id
-		 			}, function() {});
+		 item.$update({_id : item._id}, 
+			function() {});
 	};
 	
 });
+
