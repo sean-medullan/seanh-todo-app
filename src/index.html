@@ -16,21 +16,21 @@
                 </header>
                 <div class="body-content" >
                     <div style="margin-top: 15px">
-                        <input type="text" placeholder="Todo item" />
-                        <button class="btn btn-primary">
+                        <input type="text" placeholder="Todo item" ng-model="itemName" />
+                        <button ng-swipe-left="add(1); addItem()" class="btn btn-primary">
                             Add item
                         </button>
                     </div>
 
                     <div style="margin-top: 15px" class="todo-items">
                         <ul>
-                            <li class="todo-item">
+                            <li class="todo-item" ng-repeat="item in todoItems">
                                 <input type="checkbox" />
-                                &nbsp; Added item goes here
+                                &nbsp; {{item.name}}
                                 <a>remove</a>
                             </li>
                         </ul>
-                        <div class="stat">2 of 15 items completed</div>
+                        <div class="stat">{{counter}} of 15 items completed</div>
                     </div>
                 </div>
                 <footer style="margin-top: 20px;">
@@ -51,6 +51,7 @@
         <script src="/lib/angular/1.2.9/angular.js"></script>
         <script src="/lib/angular/1.2.9/angular-resource.js"></script>
         <script src="/lib/angular/1.2.9/angular-route.js"></script>
+        <script src="/lib/angular/1.2.9/angular-touch.js"></script>
         <script src="/lib/jQuery/jquery-1.9.1.min.js"></script>
         <script src="/app/app.js"></script>
         <script src="/app/todo/controllers/todoController.js"></script>
