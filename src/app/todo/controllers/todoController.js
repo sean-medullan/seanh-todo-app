@@ -1,6 +1,6 @@
 'use strict';
 
-todoApp.controller('TodoController', function($scope, KinveyResource, TodoService) {
+todoApp.controller('TodoController', function($scope, TodoService) {
 
 	var todoItems = TodoService.getTodos();
 
@@ -11,13 +11,15 @@ todoApp.controller('TodoController', function($scope, KinveyResource, TodoServic
 
 	$scope.addTodo = function(newTodo) {
 		var todo = {
-			name : newTodo.name,
-			completed : false
+			title : newTodo.title,
+			isComplete : false
 		};
 
-		TodoService.addTodo(todo);
+		if (TodoService.saveTodo(todo)) {
+			todoItems.push(todo);
+		}
 
-		newTodo.name = "";
+		newTodo.title = "";
 	};
 
 	// $scope.updateTodo = function(todo) {
@@ -33,44 +35,32 @@ todoApp.controller('TodoController', function($scope, KinveyResource, TodoServic
 		TodoService.removeTodo(todo);
 	};
 
-	$scope.completedCount = function(todo) {
-		var completedCount = 0;
+	$scope.isCompleteCount = function(todo) {
+		var isCompleteCount = 0;
 		for (var i = 0; i < todoItems.length; i++) {
-			if (todoItems[i].completed) {
-				completedCount++;
+			if (todoItems[i].isComplete) {
+				isCompleteCount++;
 			}
 		};
-		return completedCount;
+		return isCompleteCount;
 	};
 
 });
 
-todoApp.factory('TodoService', function() {
-	var todoItems = [{
-		id : 1,
-		name : "first todo",
-		completed : false
-	}, {
-		id : 2,
-		name : "second todo",
-		completed : true
-	}];
+todoApp.factory('TodoService', function(KinveyResource) {
 
 	return {
 		getTodos : function() {
-			return todoItems;
+			return KinveyResource.todos.query();
 		},
-		addTodo : function(todo) {
-			todo.id = todoItems.length;
-			todoItems.push(todo);
+		saveTodo : function(todo) {
+			console.log(todo);
+			return;
+			var todoRes = new KinveyResource.todos(todo);
+			todoRes.save();
 		},
 		removeTodo : function(todo) {
-			for (var i = 0; i < todoItems.length; i++) {
-				if (todoItems[i].id == todo.id) {
-					todoItems.splice(i, 1);
-					return;
-				}
-			};
+			KinveyResource.todos.remove({_id: todo._id});
 		},
 	};
 });
