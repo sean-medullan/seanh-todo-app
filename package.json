@@ -3,6 +3,11 @@
   "version": "0.0.0",
   "dependencies": {},
   "devDependencies": {
+    "karma": "~0.10.2",
+    "karma-junit-reporter": "~0.1.0",
+    "karma-coverage": "0.1.0",
+    "karma-ng-scenario": "*",
+    "karma-ng-html2js-preprocessor": "~0.1",
     "express": "3.4.4"
   },
   "engines": {
