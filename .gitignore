@@ -1,3 +1,4 @@
 .DS_STORE
 coverage/
 test_out/
+node_modules/
