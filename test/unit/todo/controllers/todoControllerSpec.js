@@ -84,7 +84,7 @@ describe('The "TodoController"', function() {
             httpBackend.flush();
         });
 
-        iit('should remove the item 0', function() {
+        it('should remove the item 0', function() {
         
         	httpBackend.expectGET(kinveyConfig.hostUrl+kinveyResourceUrls.todosX).respond(scope.app.todoItems);  
         	httpBackend.expectDELETE(kinveyConfig.hostUrl+kinveyResourceUrls.todosX+'/23').respond(200);
@@ -97,27 +97,35 @@ describe('The "TodoController"', function() {
         });
 
         it('should remove the item 1', function() {
-            scope.removeItem(1);
-            expect(scope.todoItems.length).toEqual(1);
-            expect(scope.todoItems[0].id).toEqual(23);
+        	httpBackend.expectGET(kinveyConfig.hostUrl+kinveyResourceUrls.todosX).respond(scope.app.todoItems);  
+        	httpBackend.expectDELETE(kinveyConfig.hostUrl+kinveyResourceUrls.todosX+'/9').respond(200);
+            scope.removeItem(scope.app.todoItems[1]);
+            expect(scope.app.todoItems.length).toEqual(1);
+            expect(scope.app.todoItems[0]._id).toEqual(23);
+            httpBackend.flush();
         });
 
     });
 
     describe('The "createItem" function', function() {
         beforeEach(function() {
+        	httpBackend.when('GET', '/todos').respond([{title: 'todo1', isComplete:false, isVisible:true}, {title: 'todo2', isComplete:false, isVisible:true}]);
+        	httpBackend.when('POST', '/todos').respond({title: 'todo1', isComplete:false, isVisible:true});
             scope.app.todoItems = [];
         });
 
         it('should be defined', function(){
+        	httpBackend.expectGET(kinveyConfig.hostUrl+kinveyResourceUrls.todosX).respond(scope.app.todoItems); 
             expect(scope.createItem).toBeDefined();
             expect(angular.isFunction(scope.createItem)).toBeTruthy();
-        })
+            httpBackend.flush();
+        });
 
         it('should add the item to the list of "todoItems"', function() {
             var oldLength = scope.app.todoItems.length;
             var titleOfNewItem = "Newly created item";
-            httpBackend.expect('POST', kinveyConfig.hostUrl + kinveyResourceUrls.todos).respond(200, {
+            httpBackend.expectGET(kinveyConfig.hostUrl+kinveyResourceUrls.todosX).respond(scope.app.todoItems);  
+            httpBackend.expect('POST', kinveyConfig.hostUrl + kinveyResourceUrls.todosX).respond(200, {
                 id: 134,
                 title: titleOfNewItem
             });
@@ -125,7 +133,7 @@ describe('The "TodoController"', function() {
             httpBackend.flush();
             expect(scope.app.todoItems.length).toEqual(oldLength+1);
             expect(scope.app.todoItems[scope.app.todoItems.length-1].title).toEqual(titleOfNewItem);
-        })
+        });
 
     });
 });
