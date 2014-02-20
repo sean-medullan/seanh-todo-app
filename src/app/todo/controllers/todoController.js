@@ -1,16 +1,19 @@
 'use strict';
 
-todoApp.controller('TodoController', function($scope, KinveyResource) {
+todoApp.controller('TodoController', function($scope, TodoPromiseResource) {
 
 	var todoItems = [];
-	
+
 	$scope.app = {
 		name : "App Awesome - To Do"
 	};
 
-	KinveyResource.todos.query({}, function(data) {
-		todoItems = $scope.app.todoItems = data;
-	}, function(error) {
+	$scope.app.todoItems = TodoPromiseResource.getAllTodos();
+	$scope.app.todoItems.then(function(todos) {
+		console.log(todos);
+		todoItems = todos;
+	}, function(resp) {
+		console.log(resp);
 	});
 
 	$scope.addTodo = function(newTodo) {
@@ -26,15 +29,18 @@ todoApp.controller('TodoController', function($scope, KinveyResource) {
 		// todoItem.$save();
 
 		//FIXME: broke this some how
-		KinveyResource.todos.save(todoItem, function(data) {
-			todoItems.push(data);
+		TodoPromiseResource.saveTodo(todoItem).then(function(resp) {
+			console.log(resp, todoItem);
+			todoItems.push(todoItem);
+		}, function(resp) {
+			console.log(resp);
 		});
 
 		newTodo.title = "";
 	};
-	
+
 	$scope.editingTodo = function(todo) {
-	  $scope.app.originalTodo = angular.extend({}, todo);
+		$scope.app.originalTodo = angular.extend({}, todo);
 	};
 
 	$scope.revertEditing = function(todo) {
@@ -50,18 +56,25 @@ todoApp.controller('TodoController', function($scope, KinveyResource) {
 		// id : todo._id
 		// }, todo);
 
-		todo.$update({
-			id : todo._id
-		}, function() {
+		TodoPromiseResource.saveTodo(todoItem).then(function(resp) {
+			console.log(resp, todoItem);
+		}, function(resp) {
+			console.log(resp);
 		});
+
+		// todo.$update({
+		// id : todo._id
+		// }, function() {
+		// });
 	};
 
-	$scope.removeTodo = function(todo) {
-		KinveyResource.todos.remove({
-			id : todo._id
-		}, function() {
+	$scope.removeTodo = function(todoItem) {
+		TodoPromiseResource.deleteTodo(todoItem._id).then(function(resp) {
+			console.log(resp);
 			var index = todoItems.indexOf(todo);
 			todoItems.splice(index, 1);
+		}, function(resp) {
+			console.log(resp);
 		});
 	};
 
@@ -92,11 +105,66 @@ todoApp.filter('archivedTodos', function() {
 	};
 });
 
+todoApp.factory('TodoPromiseResource', function(KinveyResource, $q) {
 
-todoApp.directive('todoEscape', function () {
+	return {
+		getTodo : function(id) {
+			var deferred = $q.defer();
+			KinveyResource.todos.get({
+				id : id
+			}, function(todo) {
+				deferred.resolve(todo);
+			}, function(resp) {
+				deferred.reject(resp);
+			});
+			return deferred.promise;
+		},
+		getAllTodos : function() {
+			var deferred = $q.defer();
+			KinveyResource.todos.query({}, function(todos) {
+				deferred.resolve(todos);
+			}, function(resp) {
+				deferred.reject(resp);
+			});
+			return deferred.promise;
+		},
+		saveTodo : function(todo) {
+			var deferred = $q.defer();
+			KinveyResource.todos.save(todo, function(resp) {
+				deferred.resolve(resp);
+			}, function(resp) {
+				deferred.reject(resp);
+			});
+			return deferred.promise;
+		},
+		updateTodo : function(id, todo) {
+			var deferred = $q.defer();
+			KinveyResource.todos.save(todo, function(resp) {
+				deferred.resolve(resp);
+			}, function(resp) {
+				deferred.reject(resp);
+			});
+			return deferred.promise;
+		},
+		deleteTodo : function(id) {
+			var deferred = $q.defer();
+			KinveyResource.todos.remove({
+				id : id
+			}, function(resp) {
+				deferred.resolve(resp);
+			}, function(resp) {
+				deferred.reject(resp);
+			});
+			return deferred.promise;
+		},
+	};
+
+});
+
+todoApp.directive('todoEscape', function() {
 	var ESCAPE_KEY = 27;
-	return function (scope, elem, attrs) {
-		elem.bind('keydown', function (event) {
+	return function(scope, elem, attrs) {
+		elem.bind('keydown', function(event) {
 			if (event.keyCode === ESCAPE_KEY) {
 				scope.$apply(attrs.todoEscape);
 			}
