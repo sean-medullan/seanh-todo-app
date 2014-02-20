@@ -1,9 +1,19 @@
 <div style="margin-top: 15px" class="todo-items">
 	<ul>
-		<li class="todo-item" ng-repeat="todo in app.todoItems">
-			<input type="checkbox" ng-checked="todo.isComplete" ng-model="todo.isComplete" ng-change="updateTodo(todo)" />
-			&nbsp; {{todo.title}}
-			<a ng-click="removeTodo(todo)">remove</a>
+		<li class="todo-item" ng-repeat="todo in app.todoItems" ng-class="{completed: todo.isComplete}">
+			<div class="view">
+				
+				
+			</div>
+			<form ng-submit="updateTodo(todo)">
+				<input type="checkbox" ng-checked="todo.isComplete" ng-model="todo.isComplete" ng-change="updateTodo(todo)" />
+				<input class="edit" ng-trim="false" ng-model="todo.title" 
+				todo-escape="revertEditing(todo)" ng-blur="updateTodo(todo)" ng-focus="editingTodo(todo)" 
+				todo-focus="todo == editedTodo">
+				<a ng-click="revertEditing(todo)" >Cancel changes</a>
+				<button class="destroy" ng-click="removeTodo(todo)">Remove</button>
+			</form>
+		</li>
 		</li>
 	</ul>
 	<div class="stat">

@@ -10,12 +10,6 @@ todoApp.controller('TodoController', function($scope, KinveyResource) {
 
 	KinveyResource.todos.query({}, function(data) {
 		todoItems = $scope.app.todoItems = data;
-		$scope.completedItems = 0;
-		for (var i = 0; i < data.length; i++) {
-			if (data[i].isComplete) {
-				$scope.completedItems++;
-			}
-		}
 	}, function(error) {
 	});
 
@@ -37,6 +31,18 @@ todoApp.controller('TodoController', function($scope, KinveyResource) {
 		});
 
 		newTodo.title = "";
+	};
+	
+	$scope.editingTodo = function(todo) {
+	  $scope.app.originalTodo = angular.extend({}, todo);
+	};
+
+	$scope.revertEditing = function(todo) {
+		// return KinveyResource.todos.update({
+		// id : todo._id
+		// }, todo);
+
+		todo = $scope.app.originalTodo;
 	};
 
 	$scope.updateTodo = function(todo) {
@@ -83,5 +89,17 @@ todoApp.filter('archivedTodos', function() {
 			out = out.toUpperCase();
 		}
 		return out;
+	};
+});
+
+
+todoApp.directive('todoEscape', function () {
+	var ESCAPE_KEY = 27;
+	return function (scope, elem, attrs) {
+		elem.bind('keydown', function (event) {
+			if (event.keyCode === ESCAPE_KEY) {
+				scope.$apply(attrs.todoEscape);
+			}
+		});
 	};
 });

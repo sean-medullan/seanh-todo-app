@@ -7,9 +7,15 @@
 		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
 		<link rel="stylesheet" href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 		<link rel="stylesheet" href="/assets/css/style.css"/>
+		<style
+		[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+		  display: none !important;
+		}
+		></style>
+		<script src="/lib/angular/1.2.9/angular.js"></script>
 	</head>
-	<body>
-		<div class="row" ng-controller="TodoController">
+	<body ng-cloak >
+		<div class="row" ng-controller="TodoController" >
 			<div class="col-md-8 col-md-offset-2">
 				<header>
 					<h1>{{ app.name }}</h1>
@@ -38,8 +44,7 @@
 					</ul>
 				</footer>
 			</div>
-		</div>
-		<script src="/lib/angular/1.2.9/angular.js"></script>
+		</div>		
 		<script src="/lib/angular/1.2.9/angular-resource.js"></script>
 		<script src="/lib/angular/1.2.9/angular-route.js"></script>
 		<script src="/lib/jQuery/jquery-1.9.1.min.js"></script>
