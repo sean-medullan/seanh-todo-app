@@ -22,9 +22,10 @@ kinvey.constant("KinveyConfig", {
 });
 
 kinvey.constant("KinveyResourceUrls", {
-    todos: '/todos/:id'
+    todos: '/todos/:id',
+    todosX: '/todos'
     
-})
+});
 
 kinvey.config(function ($httpProvider, KinveyConfig) {
     $httpProvider.defaults.headers.common[KinveyConfig.header.authorization.name] = KinveyConfig.header.authorization.value;

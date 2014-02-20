@@ -10,7 +10,7 @@ todoApp.controller('TodoController', function($scope, KinveyResource){
     $scope.app.getTodosStatus = "Getting Todos from Server..";
     $scope.app.todoItems = KinveyResource.todos.query({}, function(resp){
     	$scope.app.getTodosStatus = "Got it!";
-    	$scope.app.completed = countCompleted(resp);
+    	$scope.app.completed = $scope.countCompleted(resp);
     	
     	
     });
@@ -39,12 +39,19 @@ todoApp.controller('TodoController', function($scope, KinveyResource){
     	
     	KinveyResource.todos.remove({'id':item._id}, function(resp){
     		var status = resp;
-    		var itemToRemove = indexFound($scope.app.todoItems, item);
+    		var itemToRemove = $scope.indexFound($scope.app.todoItems, item);
+    		console.log("remove1");
+    		console.log(itemToRemove);
     		if (itemToRemove != -1){
-    			$scope.app.todoItems.splice(itemToRemove,1);
+    			console.log($scope.app.todoItems);
+    			
+    	
     			// recount completed as well
-    			$scope.app.completed = countCompleted($scope.app.todoItems);
+    			$scope.app.completed = $scope.countCompleted($scope.app.todoItems);
 				//console.log ("item removed");
+				$scope.app.todoItems = $scope.app.todoItems.splice(itemToRemove,1);
+				console.log($scope.app.todoItems);
+				return $scope.app.todoItems;
 			}
 
     	});
@@ -53,21 +60,21 @@ todoApp.controller('TodoController', function($scope, KinveyResource){
     
 	$scope.markDone = function(item){
 		KinveyResource.todos.update({'id':item._id},item, function(resp){
-			var itemToMark = indexFound($scope.app.todoItems, item);
+			var itemToMark = $scope.indexFound($scope.app.todoItems, item);
 			if (itemToMark != -1){
 				$scope.app.todoItems[itemToMark].isComplete = item.isComplete;
-				$scope.app.completed = countCompleted($scope.app.todoItems);
+				$scope.app.completed = $scope.countCompleted($scope.app.todoItems);
 			//	console.log("item marked as done");
 			}
 		});
 	};
 		
-	var indexFound = function(items, item){
+	$scope.indexFound = function(items, item){
 		var i = 0;
 		for (i = 0; i< items.length; i++){
 			if(items[i]._id ==  item._id)
 			{
-				//console.log("item found!");
+				console.log("item found!");
 				return i;
 			}
 		}
@@ -75,7 +82,7 @@ todoApp.controller('TodoController', function($scope, KinveyResource){
 	};
 	
 	// there is need to check the list anytime it is obtained from the server
-	var countCompleted = function(items){
+	$scope.countCompleted = function(items){
 		var i = 0;
 		var countCompleted = 0;
 		for (i = 0; i< items.length; i++){
