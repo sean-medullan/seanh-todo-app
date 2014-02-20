@@ -1,4 +1,6 @@
 <div style="margin-top: 15px" class="todo-items">
+	{{app.todoItems.length}}
+	asdfasd
 	<ul>
 		<li class="todo-item" ng-repeat="todo in app.todoItems" ng-class="{completed: todo.isComplete}">
 			<div class="view">
@@ -6,6 +8,7 @@
 				
 			</div>
 			<form ng-submit="updateTodo(todo)">
+				{{todo.id}}
 				<input type="checkbox" ng-checked="todo.isComplete" ng-model="todo.isComplete" ng-change="updateTodo(todo)" />
 				<input class="edit" ng-trim="false" ng-model="todo.title" 
 				todo-escape="revertEditing(todo)" ng-blur="updateTodo(todo)" ng-focus="editingTodo(todo)" 

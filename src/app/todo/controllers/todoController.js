@@ -2,16 +2,13 @@
 
 todoApp.controller('TodoController', function($scope, TodoPromiseResource) {
 
-	var todoItems = [];
-
 	$scope.app = {
-		name : "App Awesome - To Do"
+		name : "App Awesome - To Do",
+		todoItems : []
 	};
 
-	$scope.app.todoItems = TodoPromiseResource.getAllTodos();
-	$scope.app.todoItems.then(function(todos) {
-		console.log(todos);
-		todoItems = todos;
+	TodoPromiseResource.getAllTodos().then(function(todos) {
+		$scope.app.todoItems = todos;
 	}, function(resp) {
 		console.log(resp);
 	});
@@ -28,10 +25,11 @@ todoApp.controller('TodoController', function($scope, TodoPromiseResource) {
 		// var kvTodoHandle = new KinveyResource.todos(todoItem);
 		// todoItem.$save();
 
-		//FIXME: broke this some how
-		TodoPromiseResource.saveTodo(todoItem).then(function(resp) {
-			console.log(resp, todoItem);
-			todoItems.push(todoItem);
+		TodoPromiseResource.saveTodo(todoItem).then(function(savedTodo) {
+			console.log(savedTodo, todoItem);
+			console.log($scope.app.todoItems.length)
+			$scope.app.todoItems.push(savedTodo);
+			console.log($scope.app.todoItems.length);
 		}, function(resp) {
 			console.log(resp);
 		});
@@ -51,28 +49,21 @@ todoApp.controller('TodoController', function($scope, TodoPromiseResource) {
 		todo = $scope.app.originalTodo;
 	};
 
-	$scope.updateTodo = function(todo) {
+	$scope.updateTodo = function(todoItem) {
 		// return KinveyResource.todos.update({
 		// id : todo._id
 		// }, todo);
-
-		TodoPromiseResource.saveTodo(todoItem).then(function(resp) {
-			console.log(resp, todoItem);
+		TodoPromiseResource.updateTodo(todoItem._id, todoItem).then(function(savedTodo) {
 		}, function(resp) {
 			console.log(resp);
 		});
-
-		// todo.$update({
-		// id : todo._id
-		// }, function() {
-		// });
 	};
 
 	$scope.removeTodo = function(todoItem) {
 		TodoPromiseResource.deleteTodo(todoItem._id).then(function(resp) {
 			console.log(resp);
-			var index = todoItems.indexOf(todo);
-			todoItems.splice(index, 1);
+			var index = $scope.app.todoItems.indexOf(todoItem);
+			$scope.app.todoItems.splice(index, 1);
 		}, function(resp) {
 			console.log(resp);
 		});
@@ -81,8 +72,8 @@ todoApp.controller('TodoController', function($scope, TodoPromiseResource) {
 	//TODO: test updating a todo
 	$scope.isCompleteCount = function(todo) {
 		var isCompleteCount = 0;
-		for (var i = 0; i < todoItems.length; i++) {
-			if (todoItems[i].isComplete) {
+		for (var i = 0; i < $scope.app.todoItems.length; i++) {
+			if ($scope.app.todoItems[i].isComplete) {
 				isCompleteCount++;
 			}
 		};
@@ -139,7 +130,9 @@ todoApp.factory('TodoPromiseResource', function(KinveyResource, $q) {
 		},
 		updateTodo : function(id, todo) {
 			var deferred = $q.defer();
-			KinveyResource.todos.save(todo, function(resp) {
+			todo.$update({
+				id : todo._id
+			}, function(resp) {
 				deferred.resolve(resp);
 			}, function(resp) {
 				deferred.reject(resp);
