@@ -1,37 +1,65 @@
 'use strict';
 
-todoApp.controller('TodoController', function($scope, TodoService) {
+todoApp.controller('TodoController', function($scope, KinveyResource) {
 
-	var todoItems = TodoService.getTodos();
-
+	var todoItems = [];
+	
 	$scope.app = {
-		name : "App Awesome - To Do",
-		todoItems : todoItems
+		name : "App Awesome - To Do"
 	};
 
-	$scope.addTodo = function(newTodo) {
-		var todo = {
-			title : newTodo.title,
-			isComplete : false
-		};
-
-		if (TodoService.saveTodo(todo)) {
-			todoItems.push(todo);
+	KinveyResource.todos.query({}, function(data) {
+		todoItems = $scope.app.todoItems = data;
+		$scope.completedItems = 0;
+		for (var i = 0; i < data.length; i++) {
+			if (data[i].isComplete) {
+				$scope.completedItems++;
+			}
 		}
+	}, function(error) {
+	});
+
+	$scope.addTodo = function(newTodo) {
+
+		var todoItem = {
+			title : newTodo.title,
+			_id : null,
+			isComplete : false,
+			isActive : true,
+			isVisible : true
+		};
+		// var kvTodoHandle = new KinveyResource.todos(todoItem);
+		// todoItem.$save();
+
+		//FIXME: broke this some how
+		KinveyResource.todos.save(todoItem, function(data) {
+			todoItems.push(data);
+		});
 
 		newTodo.title = "";
 	};
 
 	$scope.updateTodo = function(todo) {
-		TodoService.updateTodo(todo);
+		// return KinveyResource.todos.update({
+		// id : todo._id
+		// }, todo);
+
+		todo.$update({
+			id : todo._id
+		}, function() {
+		});
 	};
 
 	$scope.removeTodo = function(todo) {
-		TodoService.removeTodo(todo);
-		//FIXME: not working
-		$scope.app.todoItems = TodoService.getTodos();
+		KinveyResource.todos.remove({
+			id : todo._id
+		}, function() {
+			var index = todoItems.indexOf(todo);
+			todoItems.splice(index, 1);
+		});
 	};
 
+	//TODO: test updating a todo
 	$scope.isCompleteCount = function(todo) {
 		var isCompleteCount = 0;
 		for (var i = 0; i < todoItems.length; i++) {
@@ -42,26 +70,6 @@ todoApp.controller('TodoController', function($scope, TodoService) {
 		return isCompleteCount;
 	};
 
-});
-
-todoApp.factory('TodoService', function(KinveyResource) {
-
-	return {
-		getTodos : function() {
-			return KinveyResource.todos.query();
-		},
-		saveTodo : function(todo) {
-			return KinveyResource.todos.save(todo);
-		},
-		removeTodo : function(todo) {
-			KinveyResource.todos.remove({
-				id : todo._id
-			});
-		},
-		updateTodo : function(todo) {
-			return KinveyResource.todos.update({ id:todo._id }, todo);
-		}, 
-	};
 });
 
 todoApp.filter('archivedTodos', function() {

@@ -11,8 +11,8 @@ describe('The "TodoController"', function() {
     beforeEach(inject(function($rootScope, $controller, $httpBackend, $injector) {
         scope = $rootScope.$new();
         httpBackend = $httpBackend;
-        kinveyResourceUrls = $injector.get("KinveyResourceUrls")
-        kinveyConfig = $injector.get("KinveyConfig")
+        kinveyResourceUrls = $injector.get("KinveyResourceUrls");
+        kinveyConfig = $injector.get("KinveyConfig");
         ctrl = $controller('TodoController', {
             $scope : scope
         });
@@ -56,7 +56,7 @@ describe('The "TodoController"', function() {
                 isActive : true,
                 isVisible : true
             }];
-        })
+        });
         it('should be defined', function() {
             expect(scope.removeItem).toBeDefined();
             expect(angular.isFunction(scope.removeItem)).toBeTruthy();
@@ -84,7 +84,7 @@ describe('The "TodoController"', function() {
         it('should be defined', function(){
             expect(scope.createItem).toBeDefined();
             expect(angular.isFunction(scope.createItem)).toBeTruthy();
-        })
+        });
 
         it('should add the item to the list of "todoItems"', function() {
             var oldLength = scope.app.todoItems.length;
@@ -97,7 +97,7 @@ describe('The "TodoController"', function() {
             httpBackend.flush();
             expect(scope.app.todoItems.length).toEqual(oldLength+1);
             expect(scope.app.todoItems[scope.app.todoItems.length-1].title).toEqual(titleOfNewItem);
-        })
+        });
 
     });
 });
