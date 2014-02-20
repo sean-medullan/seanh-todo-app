@@ -20,12 +20,7 @@ todoApp.controller('TodoController', function($scope, KinveyResource){
     
     $scope.createItem = function(todo){
     	var todo = { title: todo, isComplete: false, isVisible: true, isActive:true };
-    	/*$scope.app.todoItems.push(   		
-    		{ name: todo,
-    		  isComplete: false,
-    		  id: $scope.id
-    		});
-    	*/
+ 
     	KinveyResource.todos.save(todo, function(resp){
     		var status = resp;
     		$scope.app.todoItems.push(resp);
@@ -45,17 +40,16 @@ todoApp.controller('TodoController', function($scope, KinveyResource){
     		if (itemToRemove != -1){
     			console.log($scope.app.todoItems);
     			
-    	
     			// recount completed as well
     			$scope.app.completed = $scope.countCompleted($scope.app.todoItems);
 				//console.log ("item removed");
-				$scope.app.todoItems = $scope.app.todoItems.splice(itemToRemove,1);
+				$scope.app.todoItems.splice(itemToRemove,1);
 				console.log($scope.app.todoItems);
 				return $scope.app.todoItems;
 			}
 
     	});
- 
+  
     };
     
 	$scope.markDone = function(item){
