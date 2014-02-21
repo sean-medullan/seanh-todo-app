@@ -44,8 +44,25 @@ todoApp.controller('TodoController', function($scope, TodoPromiseResource, $rout
 	};
 
 	$scope.removeTodo = function(todoItem) {
-		TodoPromiseResource.deleteTodo(todoItem._id).then(function(resp) {
+		// TodoPromiseResource.deleteTodo(todoItem._id).then(function(resp) {
+		// console.log(resp);
+		// var index = $scope.app.todoItems.indexOf(todoItem);
+		// $scope.app.todoItems.splice(index, 1);
+		// }, function(resp) {
+		// console.log(resp);
+		// });
+		todoItem.isVisible = false;
+		TodoPromiseResource.updateTodo(todoItem._id, todoItem).then(function(savedTodo) {
+			var index = $scope.app.todoItems.indexOf(todoItem);
+			$scope.app.todoItems.splice(index, 1);
+		}, function(resp) {
 			console.log(resp);
+		});
+	};
+
+	$scope.archiveTodo = function(todoItem) {
+		todoItem.isActive = false;
+		TodoPromiseResource.updateTodo(todoItem._id, todoItem).then(function(savedTodo) {
 			var index = $scope.app.todoItems.indexOf(todoItem);
 			$scope.app.todoItems.splice(index, 1);
 		}, function(resp) {
@@ -65,17 +82,41 @@ todoApp.controller('TodoController', function($scope, TodoPromiseResource, $rout
 
 });
 
-todoApp.filter('archivedTodos', function() {
+todoApp.filter('deletedTodos', function() {
 	return function(input, uppercase) {
-		var out = "";
+		return function(input) {
+			var filtered = [];
+			for (var i = 0; i < input.length; i++) {
+				if (!input[i].isVisible) {
+					filtered.push(input[i]);
+				}
+			};
+			return filtered;
+		};
+	};
+});
+
+todoApp.filter('archivedTodos', function() {
+	return function(input) {
+		var filtered = [];
 		for (var i = 0; i < input.length; i++) {
-			out = input.charAt(i) + out;
-		}
-		// conditional based on optional argument
-		if (uppercase) {
-			out = out.toUpperCase();
-		}
-		return out;
+			if (!input[i].isActive) {
+				filtered.push(input[i]);
+			}
+		};
+		return filtered;
+	};
+});
+
+todoApp.filter('allTodos', function() {
+	return function(input) {
+		var filtered = [];
+		for (var i = 0; i < input.length; i++) {
+			if (input[i].isActive && input[i].isVisible ) {
+				filtered.push(input[i]);
+			}
+		};
+		return filtered;
 	};
 });
 
