@@ -2,20 +2,12 @@
 
 todoApp.controller('TodoController', function($scope, TodoPromiseResource, $route) {
 
-	console.log($route.current);
 	$scope.app = {
 		name : "App Awesome - To Do",
 		todoItems : $route.current.locals.todoItems
 	};
 
-	// TodoPromiseResource.getAllTodos().then(function(todos) {
-		// $scope.app.todoItems = todos;
-	// }, function(resp) {
-		// console.log(resp);
-	// });
-
 	$scope.addTodo = function(newTodo) {
-
 		var todoItem = {
 			title : newTodo.title,
 			_id : null,
@@ -23,14 +15,8 @@ todoApp.controller('TodoController', function($scope, TodoPromiseResource, $rout
 			isActive : true,
 			isVisible : true
 		};
-		// var kvTodoHandle = new KinveyResource.todos(todoItem);
-		// todoItem.$save();
-
 		TodoPromiseResource.saveTodo(todoItem).then(function(savedTodo) {
-			console.log(savedTodo, todoItem);
-			console.log($scope.app.todoItems.length)
 			$scope.app.todoItems.push(savedTodo);
-			console.log($scope.app.todoItems.length);
 		}, function(resp) {
 			console.log(resp);
 		});
@@ -51,9 +37,6 @@ todoApp.controller('TodoController', function($scope, TodoPromiseResource, $rout
 	};
 
 	$scope.updateTodo = function(todoItem) {
-		// return KinveyResource.todos.update({
-		// id : todo._id
-		// }, todo);
 		TodoPromiseResource.updateTodo(todoItem._id, todoItem).then(function(savedTodo) {
 		}, function(resp) {
 			console.log(resp);
@@ -70,7 +53,6 @@ todoApp.controller('TodoController', function($scope, TodoPromiseResource, $rout
 		});
 	};
 
-	//TODO: test updating a todo
 	$scope.isCompleteCount = function(todo) {
 		var isCompleteCount = 0;
 		for (var i = 0; i < $scope.app.todoItems.length; i++) {

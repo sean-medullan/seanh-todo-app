@@ -1,21 +1,24 @@
+<div style="margin-top: 15px">
+	<input type="text" placeholder="Todo item" ng-model="newTodo.title" />
+	<button class="btn btn-primary" ng-click="addTodo(newTodo)">
+		Add item
+	</button>
+</div>
 <div style="margin-top: 15px" class="todo-items">
-	{{app.todoItems.length}}
-	asdfasd
 	<ul>
 		<li class="todo-item" ng-repeat="todo in app.todoItems" ng-class="{completed: todo.isComplete}">
-			<div class="view">
-				
-				
-			</div>
+			<div class="view"></div>
 			<form ng-submit="updateTodo(todo)">
 				{{todo.id}}
 				<input type="checkbox" ng-checked="todo.isComplete" ng-model="todo.isComplete" ng-change="updateTodo(todo)" />
-				<input class="edit" ng-trim="false" ng-model="todo.title" 
-				todo-escape="revertEditing(todo)" ng-blur="updateTodo(todo)" ng-focus="editingTodo(todo)" 
+				<input class="edit" ng-trim="false" ng-model="todo.title"
+				todo-escape="revertEditing(todo)" ng-blur="updateTodo(todo)" ng-focus="editingTodo(todo)"
 				todo-focus="todo == editedTodo">
-				<a ng-click="revertEditing(todo)" >Cancel changes</a>
-				<button class="destroy" ng-click="removeTodo(todo)">Remove</button>
 			</form>
+			<a ng-click="revertEditing(todo)" >Cancel changes</a>
+			<button class="destroy" ng-click="removeTodo(todo)">
+				Remove
+			</button>
 		</li>
 		</li>
 	</ul>
