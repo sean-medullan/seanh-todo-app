@@ -12,10 +12,15 @@ function($routeProvider, $locationProvider) {
 		controller : 'TodoController'
 	}).when('/all', {
 		templateUrl : 'app/todo/partials/todo-list.html',
-		controller : 'TodoController'
+		controller : 'TodoController',
+		resolve : {
+			todoItems : function(TodoPromiseResource) {
+				return TodoPromiseResource.getAllTodos();
+			}
+		}
 	}).otherwise({
 		redirectTo : '/all'
 	});
-	$locationProvider.html5Mode(true);
+	//$locationProvider.html5Mode(true);
 }]);
 

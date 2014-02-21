@@ -1,17 +1,18 @@
 'use strict';
 
-todoApp.controller('TodoController', function($scope, TodoPromiseResource) {
+todoApp.controller('TodoController', function($scope, TodoPromiseResource, $route) {
 
+	console.log($route.current);
 	$scope.app = {
 		name : "App Awesome - To Do",
-		todoItems : []
+		todoItems : $route.current.locals.todoItems
 	};
 
-	TodoPromiseResource.getAllTodos().then(function(todos) {
-		$scope.app.todoItems = todos;
-	}, function(resp) {
-		console.log(resp);
-	});
+	// TodoPromiseResource.getAllTodos().then(function(todos) {
+		// $scope.app.todoItems = todos;
+	// }, function(resp) {
+		// console.log(resp);
+	// });
 
 	$scope.addTodo = function(newTodo) {
 
