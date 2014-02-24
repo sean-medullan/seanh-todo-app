@@ -1,0 +1,12 @@
+<div style="margin-top: 15px" class="todo-items">
+    <ul>
+        <li class="todo-item" ng-repeat ="items in todos">
+            <input type="checkbox" ng-model="items.isComplete" title="Complete" ng-change="updateTodos(items)"/>
+            &nbsp; {{items.title}}
+            <a style="margin-left: 20px;" title="Archive" ng-click="archiveTodos(items)" ng-show="toShow()">Archive</a>
+            <a style="margin-left: 20px;" ng-click="removeItem($index)">delete</a>
+        </li>
+    </ul>
+    <div class="stat">{{completedItems}} of {{todos.length}} items completed</div>
+</div>
+        

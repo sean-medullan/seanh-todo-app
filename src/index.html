@@ -9,51 +9,18 @@
         <link rel="stylesheet" href="/assets/css/style.css"/>
     </head>
     <body>
-        <div class="row" ng-controller="TodoController">
-            <div class="col-md-8 col-md-offset-2">
-                <header>
-                    <h1>{{ app.name }}</h1>
-                </header>
-                <div class="body-content" >
-                    <div style="margin-top: 15px">
-                        <input type="text" placeholder="Todo item" ng-model="todoItem"/>
-                        <button class="btn btn-primary" ng-click= "createItem(todoItem)">
-                            Add item
-                        </button>
-                    </div>
-
-                    <div style="margin-top: 15px" class="todo-items">
-                        <ul>
-                            <li class="todo-item" ng-repeat ="items in app.todoItems">
-                                <input type="checkbox" ng-model="items.isComplete" ng-change="updateStatus(items)"/>
-                                &nbsp; {{items.title}}
-                                <a>remove</a>
-                            </li>
-                        </ul>
-                        <div class="stat">{{completedItems}} of {{app.todoItems.length}} items completed</div>
-                    </div>
-                </div>
-                <footer style="margin-top: 20px;">
-                    <ul class="list-inline-piped">
-                        <li>
-                            <a href="/archived">archived</a>
-                        </li>
-                        <li>
-                            <a href="/trashed">trashed</a>
-                        </li>
-                        <li>
-                            <a href="/all">all</a>
-                        </li>
-                    </ul>
-                </footer>
-            </div>
-        </div>
+        <ng-view></ng-view>
+        
         <script src="/lib/angular/1.2.9/angular.js"></script>
         <script src="/lib/angular/1.2.9/angular-resource.js"></script>
         <script src="/lib/angular/1.2.9/angular-route.js"></script>
         <script src="/lib/jQuery/jquery-1.9.1.min.js"></script>
         <script src="/app/app.js"></script>
         <script src="/app/todo/controllers/todoController.js"></script>
+<!--
+		<script src="/app/todo/services/todoService.js"></script>
+        <script src="app/todo/services/todoResolve.js"></script>
+-->
         <script src="/app/_common/services/kinvey.js"></script>
         <script src="/lib/jQuery/jquery-ui-1.10.0.min.js"></script>
     </body>

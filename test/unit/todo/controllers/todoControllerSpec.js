@@ -97,7 +97,8 @@ describe('The "TodoController"', function() {
         it('should add the item to the list of "todoItems"', function() {
             var oldLength = scope.app.todoItems.length;
             var titleOfNewItem = "Newly created item";
-            httpBackend.expect('POST', kinveyConfig.hostUrl + kinveyResourceUrls.todos).respond(200, {
+            httpBackend.expect('GET', 'https://baas.kinvey.com/appdata/kid_PTFROdkMpM/todos?').respond(200);
+			httpBackend.expect('POST', kinveyConfig.hostUrl + kinveyResourceUrls.todos).respond(200, {
                 id: 134,
                 title: titleOfNewItem
             });
@@ -116,6 +117,8 @@ describe('The "TodoController"', function() {
             expect(angular.isFunction(scope.updateStatus)).toBeTruthy();
 			httpBackend.flush();
         });
+		
+	
 	});
 });
 
