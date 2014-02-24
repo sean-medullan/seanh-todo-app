@@ -1,0 +1,12 @@
+<div style="margin-top: 15px" class="todo-items">
+    <ul>
+        <li class="todo-item" ng-repeat="todoItem in filteredTodos">
+            <input type="checkbox" />
+            &nbsp; {{ todoItem.title }}
+            <a ng-click="removeTodo(todoItem)">remove</a>
+        </li>
+    </ul>
+    <div class="stat">
+        0 of {{filteredTodos.length}} items completed
+    </div>
+</div>

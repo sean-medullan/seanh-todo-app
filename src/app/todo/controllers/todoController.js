@@ -63,9 +63,9 @@ todoApp.controller('TodoController', function($scope, KinveyResource, $filter){
 
     $scope.init = function() {
         if($scope.itemType=="active") {
-            $scope.todos = $filter('activeTodos')($scope.todos);
+            $scope.filteredTodos = $filter('activeTodos')($scope.todos);
         }else if($scope.itemType=="archived") {
-            $scope.todos = $filter('archivedTodos')($scope.todos);
+            $scope.filteredTodos = $filter('archivedTodos')($scope.todos);
         }
     };
 
@@ -109,6 +109,7 @@ todoApp.directive('todosList', function() {
             itemType: '@'
         },
         link : function(scope, element, attrs) {
+
         }
     }
 });

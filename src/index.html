@@ -10,7 +10,6 @@
     </head>
     <body>
         <div class="row" ng-controller="HomeController">
-            {{app.todoItems}}
             <div class="col-md-8 col-md-offset-2">
                 <header>
                     <h1>{{ app.name }}</h1>
@@ -22,12 +21,10 @@
                             Add item
                         </button>
                     </div>
+                    <h3>Active Todos</h3>
                     <todos-list todos="app.todoItems" item-type="active"></todos-list>
 
-                    <br/>
-                    <br/>
-                    <br/>
-
+                    <h3>Archived Todos</h3>
                     <todos-list todos="app.todoItems" item-type="archived"></todos-list>
                 </div>
                 <footer style="margin-top: 20px;">
