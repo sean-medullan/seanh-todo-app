@@ -9,29 +9,26 @@
         <link rel="stylesheet" href="/assets/css/style.css"/>
     </head>
     <body>
-        <div class="row" ng-controller="TodoController">
+        <div class="row" ng-controller="HomeController">
+            {{app.todoItems}}
             <div class="col-md-8 col-md-offset-2">
                 <header>
                     <h1>{{ app.name }}</h1>
                 </header>
                 <div class="body-content" >
                     <div style="margin-top: 15px">
-                        <input type="text" placeholder="Todo item" />
-                        <button class="btn btn-primary">
+                        <input type="text" placeholder="Todo item" ng-model="todoTitle" />
+                        <button class="btn btn-primary" ng-click="addTodo(todoTitle)">
                             Add item
                         </button>
                     </div>
+                    <todos-list todos="app.todoItems" item-type="active"></todos-list>
 
-                    <div style="margin-top: 15px" class="todo-items">
-                        <ul>
-                            <li class="todo-item">
-                                <input type="checkbox" />
-                                &nbsp; Added item goes here
-                                <a>remove</a>
-                            </li>
-                        </ul>
-                        <div class="stat">2 of 15 items completed</div>
-                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+
+                    <todos-list todos="app.todoItems" item-type="archived"></todos-list>
                 </div>
                 <footer style="margin-top: 20px;">
                     <ul class="list-inline-piped">
