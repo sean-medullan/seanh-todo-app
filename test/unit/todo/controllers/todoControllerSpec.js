@@ -12,13 +12,15 @@ describe('The "TodoController"', function() {
         scope = $rootScope.$new();
         httpBackend = $httpBackend;
         kinveyResourceUrls = $injector.get("KinveyResourceUrls")
-        kinveyConfig = $injector.get("KinveyConfig")
+        kinveyConfig = $injector.get("KinveyConfig");
+        httpBackend.expect("GET", kinveyConfig.hostUrl + "/sean-todos").respond(200, [])
         ctrl = $controller('TodoController', {
             $scope : scope
         });
+        httpBackend.flush();
     }));
 
-    afterEach(function(){
+    afterEach(function() {
         //Ensures all request i expect to have been called, have been called
         httpBackend.verifyNoOutstandingExpectation();
         // Ensures no requests were made, that i didn't expect
@@ -40,65 +42,111 @@ describe('The "TodoController"', function() {
         });
     });
 
-    describe('The "removeItem" function', function() {
+    describe('The "removeTodo" function', function() {
 
         beforeEach(function() {
-            scope.todoItems = [{
+            scope.app = {
+            };
+            scope.app.todoItems = [{
                 title : 'This is an item',
-                id : 23,
+                _id : 23,
                 isComplete : false,
                 isActive : true,
                 isVisible : true
             }, {
                 title : 'This is a second item',
-                id : 9,
+                _id : 9,
                 isComplete : true,
                 isActive : true,
                 isVisible : true
             }];
         })
         it('should be defined', function() {
-            expect(scope.removeItem).toBeDefined();
-            expect(angular.isFunction(scope.removeItem)).toBeTruthy();
+            expect(scope.removeTodo).toBeDefined();
+            expect(angular.isFunction(scope.removeTodo)).toBeTruthy();
         });
 
         it('should remove the item at the index 0', function() {
-            scope.removeItem(0);
-            expect(scope.todoItems.length).toEqaul(1);
-            expect(scope.todoItems[0].id).toEqaul(9);
+            httpBackend.expect("DELETE", kinveyConfig.hostUrl + '/sean-todos/23').respond(200, {});
+            scope.removeTodo(scope.app.todoItems[0]);
+            httpBackend.flush();
+            expect(scope.app.todoItems.length).toEqual(1);
+            expect(scope.app.todoItems[0]._id).toEqual(9);
         });
 
         it('should remove the item at the index 1', function() {
-            scope.removeItem(1);
-            expect(scope.todoItems.length).toEqaul(1);
-            expect(scope.todoItems[0].id).toEqaul(23);
+            httpBackend.expect("DELETE", kinveyConfig.hostUrl + '/sean-todos/9').respond(200, {});
+            scope.removeTodo(scope.app.todoItems[1]);
+            httpBackend.flush();
+            expect(scope.app.todoItems.length).toEqual(1);
+            expect(scope.app.todoItems[0]._id).toEqual(23);
         });
 
     });
 
-    describe('The "createItem" function', function() {
+    describe('The "addTodo" function', function() {
         beforeEach(function() {
             scope.app.todoItems = [];
         });
 
-        it('should be defined', function(){
-            expect(scope.createItem).toBeDefined();
-            expect(angular.isFunction(scope.createItem)).toBeTruthy();
+        it('should be defined', function() {
+            expect(scope.addTodo).toBeDefined();
+            expect(angular.isFunction(scope.addTodo)).toBeTruthy();
         })
-
         it('should add the item to the list of "todoItems"', function() {
             var oldLength = scope.app.todoItems.length;
             var titleOfNewItem = "Newly created item";
-            httpBackend.expect('POST', kinveyConfig.hostUrl + kinveyResourceUrls.todos).respond(200, {
-                id: 134,
-                title: titleOfNewItem
+            httpBackend.expect('POST', kinveyConfig.hostUrl + "/sean-todos").respond(200, {
+                id : 134,
+                title : titleOfNewItem
             });
-            scope.createItem(titleOfNewItem);
+            scope.addTodo(titleOfNewItem);
             httpBackend.flush();
-            expect(scope.app.todoItems.length).toEqual(oldLength+1);
-            expect(scope.app.todoItems[scope.app.todoItems.length-1].title).toEqual(titleOfNewItem);
-        })
+            expect(scope.app.todoItems.length).toEqual(oldLength + 1);
+            expect(scope.app.todoItems[scope.app.todoItems.length - 1].title).toEqual(titleOfNewItem);
+        });
 
+        it('should do some stuff when it fails to create to the todo item', function() {
+            var oldLength = scope.app.todoItems.length;
+            var titleOfNewItem = "Newly created item";
+            httpBackend.expect('POST', kinveyConfig.hostUrl + "/sean-todos").respond(500, {});
+            scope.addTodo(titleOfNewItem);
+            httpBackend.flush();
+            expect(scope.app.todoItems.length).toEqual(oldLength);
+        })
     });
 });
 
+describe('The Todo Filters', function() {
+
+    var filter, activeTodo, archivedTodo;
+
+    beforeEach(module('TodoApp'));
+
+    beforeEach(inject(function($filter) {
+        filter = $filter;
+    }));
+
+    beforeEach(function() {
+        activeTodo = {
+            _id : 13,
+            isActive : true
+        };
+        archivedTodo = {
+            _id : 12,
+            isActive : false
+        };
+    })
+    describe('The "archivedTodos" filter', function() {
+        it('should only return archived items', function() {
+            var todos = [activeTodo, archivedTodo];
+            expect(filter('archivedTodos')(todos)).toEqual([archivedTodo]);
+        })
+    })
+    describe('The "activeTodos" filter', function() {
+        it('should only return active items', function() {
+            var todos = [activeTodo, archivedTodo];
+            expect(filter('activeTodos')(todos)).toEqual([activeTodo]);
+        })
+    })
+})

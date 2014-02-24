@@ -16,21 +16,21 @@
                 </header>
                 <div class="body-content" >
                     <div style="margin-top: 15px">
-                        <input type="text" placeholder="Todo item" />
-                        <button class="btn btn-primary">
+                        <input type="text" placeholder="Todo item" ng-model="todoTitle" />
+                        <button class="btn btn-primary" ng-click="addTodo(todoTitle)">
                             Add item
                         </button>
                     </div>
 
                     <div style="margin-top: 15px" class="todo-items">
                         <ul>
-                            <li class="todo-item">
+                            <li class="todo-item" ng-repeat="todoItem in app.todoItems">
                                 <input type="checkbox" />
-                                &nbsp; Added item goes here
-                                <a>remove</a>
+                                &nbsp; {{ todoItem.title }}
+                                <a ng-click="removeTodo(todoItem)">remove</a>
                             </li>
                         </ul>
-                        <div class="stat">2 of 15 items completed</div>
+                        <div class="stat">0 of {{app.todoItems.length}} items completed</div>
                     </div>
                 </div>
                 <footer style="margin-top: 20px;">

@@ -17,7 +17,7 @@ kinvey.constant("KinveyConfig", {
 });
 
 kinvey.constant("KinveyResourceUrls", {
-    todos: '/todos'
+    todos: '/sean-todos/:id'
 })
 
 kinvey.config(function ($httpProvider, KinveyConfig) {
